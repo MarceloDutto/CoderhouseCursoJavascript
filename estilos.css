@@ -1,0 +1,225 @@
+/*ESTILOS GENERALES*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+    color: #fff;
+}
+
+img {
+    width: 100%;
+    object-fit: contain;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', Verdana, Geneva, Tahoma, sans-serif;
+}
+
+p {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 1.3rem;
+}
+
+a {
+    text-decoration: none;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+body {
+    background-color: #9BBBFC;
+    
+}
+
+/* MENSAJE DE BIENVENIDA */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #9BBBFC;
+}
+
+.modalContent {
+    margin: 5% auto;
+    background-color: #4741A6;
+    width: 50%;
+    padding: 50px;
+    border: 1px solid #9BBBFC;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.modalContent h3 {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.modalContent span {
+    color: #F9CE69;
+    font-weight: 700;
+}
+
+.modalContent input {
+    height: 32px;
+    border-radius: 5px;
+    width: 350px;
+    padding-left: 8px;
+}
+.modalContent button {
+    height: 32px;
+    border-radius: 5px;
+    width: 150px;
+    cursor: pointer;
+}
+
+
+/* HEADER */
+
+.headerContainer {
+    display: flex;  
+    justify-content: space-between;
+    background-color: #4741A6;
+    width: 100%;
+    height: 70px;
+    padding: 0 4%;
+    position: fixed
+}
+
+.logo {
+    display: flex;
+}
+
+.logo h1 {
+    font-family: 'Kalam', cursive;
+    font-weight: 700;
+    font-size: 4.5rem;
+}
+
+.logo span {
+    color: #F9CE69;
+}
+
+.logo img {
+    width: 60px;
+    padding-left: 8px;
+}
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+.searchBar label {
+    font-family: 'Montserrat', Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    padding-right: 10px;
+}
+
+.searchBar input {
+    height: 28px;
+    width: 250px;
+    border-radius: 5px;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.userInfo span {
+    color: #F9CE69;
+}
+
+.userInfo h2 {
+    font-size: 2rem;
+}
+
+.banner img {
+    object-fit: cover;
+    height: 450px;
+}
+
+/*SECTIONS*/
+
+section h3 {
+    font-size: 2.3rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    padding-left: 15px;
+}
+
+section h4 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    padding-bottom: 10px;
+    color: #F9CE69;
+}
+
+section p {
+    line-height: 1.4;
+}
+
+.container {
+    padding: 30px 0;
+}
+
+.row {
+    width: 95%;
+    margin: 0 auto;
+    padding: 10px;
+    margin-bottom: 30px;
+}
+
+#todasCards {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card {
+    width: 300px;
+    background-color: #4741A6;
+    overflow-x: hidden;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.cardInfo {
+    display: flex;
+}
+.cardText {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.cardActions {
+    display: flex;
+    flex-direction: column;
+    margin: auto ;
+    padding: 10px;
+}
+.cardActions a {
+    font-size: 1rem;
+    color: #F9CE69;
+    line-height: 1.2;
+}
+
+.cardActions a img {
+    width: 45px;
+    background-color: #fff;
+    border-radius: 50%;
+    padding: 5px;
+}
