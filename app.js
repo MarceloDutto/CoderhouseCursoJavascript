@@ -43,7 +43,7 @@ let carrito = [];
 const body = document.querySelector("body");
 const botonCarrito = document.querySelector("#botonCarrito");
 botonCarrito.addEventListener("click", () => {
-    if (carrito !== 0) {
+    if (carrito.length != 0)  {
         abrirCarrito()
     } 
 })
@@ -261,8 +261,7 @@ function abrirCarrito() {
             modalContent.classList.add("descripcionPelicula");
             modalContent.innerHTML = `<img src="./imagenes/${pelicula.miniatura}.jpg" alt="matrix">
             <p>${pelicula.nombre}</p>
-            <p>$${pelicula.precio}</p>
-            <button>Quitar pelicula</button>`
+            <p>$${pelicula.precio}</p>`
             modalCarrito.appendChild(modalContent);
         })
         let montoTotal = document.createElement("div");
