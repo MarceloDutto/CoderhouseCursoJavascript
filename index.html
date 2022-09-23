@@ -23,6 +23,11 @@
                 <input type="text">
             </div>
             <div id="userName" class="userInfo"></div>
+            <div class="carrito">
+                <h2>Ver carrito</h2>
+                <img src="./imagenes/cart-icon.png" alt="carrito" id="botonCarrito">
+                <div id="carrito"></div>
+            </div>
         </div>
     </header>
 
@@ -31,32 +36,13 @@
     </div>
 
     <div class="container">
-        <!-- <section class="row favoritas">
-            <h3>Tus favoritas</h3>
-            <div id="favoritasCards">
-                <div class="card">
-                    <div>
-                        <img src="./imagenes/The-Matrix-poster-resized.jpg" alt="Matrix">
-                    </div>
-                    <div class="cardInfo">
-                        <div class="cardText">
-                            <h4>The Matrix</h4>
-                            <p>Duración: 120 min</p>
-                            <p>Género: Acción</p>
-                            <p>Precio: $800</p>   
-                        </div>
-                        <div class="cardActions">               
-                            <a href="#"><img src="./imagenes/mas-icon.png" alt="mas"></a>
-                            <a href="#"><img src="./imagenes/heart-icon.png" alt="favorito"></a>  
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section> -->
+        <section class="row favoritas">
+            <h3 id="favTitulo" >Tus favoritas</h3>
+            <div id="favoritasCards"></div>
+        </section>
         <section class="row catalogo">
             <h3>Nuestro catálogo</h3>
-            <div id="todasCards">
-            </div>
+            <div id="todasCards"></div>
         </section>
     </div>
 
@@ -71,6 +57,27 @@
     </div>
 
     <div id="modalInfoPelicula" class="modalInfo"></div>
+
+    <div id="modalCart">
+        <div class="modalCarritoContent">
+            <h3>Carrito de compras</h3>
+            <div id="modalCarrito">
+                <!-- <div class="descripcionPelicula">
+                    <img src="./imagenes/miniatura-matrix.jpg" alt="matrix">
+                    <p>Matrix</p>
+                    <p>$800</p>
+                    <button>Quitar pelicula</button>
+                </div>
+                <div class="montoTotal">
+                    <h4>Total de la compra: $800</h4>
+                </div>
+                <div class="accionesCarrito">
+                    <button>Finalizar compra</button>
+                    <button>Volver</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
 
 <script src="./app.js"></script>
 
