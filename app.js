@@ -38,14 +38,12 @@ localStorage.setItem("CatalogoCompleto", todasPeliculasStr);
 //Se declaran variables
 
 let usuario;
-let favoritos = [];
-let carrito = [];
+let favoritos = JSON.parse (localStorage.getItem('PeliculasFavoritas')) || [];
+let carrito = JSON.parse (localStorage.getItem('PeliculasEnCarrito')) || [];
 const body = document.querySelector("body");
 const botonCarrito = document.querySelector("#botonCarrito");
 botonCarrito.addEventListener("click", () => {
-    if (carrito.length != 0)  {
-        abrirCarrito()
-    } 
+    carrito.length != 0 && abrirCarrito();
 })
 
 
@@ -73,18 +71,15 @@ function ingresarUsuario() {
     ingreso.addEventListener("click", () => {
         campo.value = ""
         cerrarModal(pantallaIngreso);
-        if (nombre != undefined) {
-            validarUsuario(nombre);
-        } else {
-            nombre = "usuario";
-            validarUsuario(nombre);
-        }  
+        nombre != undefined ? nombre : nombre = "usuario";
+        validarUsuario(nombre);
     })
 }
 
-function setButton(inBtn, addedClass, container, action, reference) {
+function setButton(inBtn, addedClass, newId, container, action, reference) {
     let btn = document.createElement("button");
     btn.classList.add(addedClass);
+    btn.id = newId;
     btn.innerHTML += inBtn;
     container.appendChild(btn);
     btn.addEventListener("click", () => {
@@ -153,53 +148,50 @@ function mostrarPeliculas() {
         })
 } else {
     ftitulo.style.display = "none"
-    if (favoritas.hasChildNodes()) {
-        favoritas.removeChild(favoritas.firstChild);
-    }
+    favoritas.hasChildNodes() && favoritas.removeChild(favoritas.firstChild);
 }
 }
 
 function mostrarInfo(array, indice) {
     const item = array[indice];
+    let {nombre, resumen, director, duracion, genero, estreno, clasificacionEdad, calificacionIMDB, precio, poster} = item;
     let modalInfo = document.querySelector("#modalInfoPelicula");
     let itemInfo = document.createElement("div");
     itemInfo.classList.add("modalInfoContent");
     modalInfo.innerHTML = "";
     itemInfo.innerHTML = `<div class="divImagen">
-    <img src="./imagenes/${item.poster}.jpg" alt="poster">
+    <img src="./imagenes/${poster}.jpg" alt="poster">
     </div>
     <div>
         <div>
-            <h3>${item.nombre}</h3>
-            <p>${item.resumen}</p>
-            <p>Director: ${item.director}</p>
-            <p>Duración: ${item.duracion} min.</p>
-            <p>Género: ${item.genero}</p>
-            <p>Año de estreno: ${item.estreno}</p>
-            <p>Clasificación por edad: Para mayores de ${item.clasificacionEdad} años</p>
-            <p>Calificación de IMDB: ${item.calificacionIMDB}</p>
-            <p>Mirala por $ ${item.precio}</p>
+            <h3>${nombre}</h3>
+            <p>${resumen}</p>
+            <p>Director: ${director}</p>
+            <p>Duración: ${duracion} min.</p>
+            <p>Género: ${genero}</p>
+            <p>Año de estreno: ${estreno}</p>
+            <p>Clasificación por edad: Para mayores de ${clasificacionEdad} años</p>
+            <p>Calificación de IMDB: ${calificacionIMDB}</p>
+            <p>Mirala por $ ${precio}</p>
         </div>
     </div>`
     modalInfo.appendChild(itemInfo);
 
-    let btnFavText; 
-    if (favoritos.includes(item)) {
-        btnFavText = "Quitar de favoritos"
-    } else {
-        btnFavText = "Agregar a favoritos"
-    }
+    let peliculaEncontradaFavoritos = favoritos.findIndex((elemento) => {
+        return elemento.nombre === item.nombre
+    });
+    let btnFavText;
+    peliculaEncontradaFavoritos === -1 ? btnFavText = "Agregar a favoritos" : btnFavText = "Quitar de favoritos";
 
+    let peliculaEncontradaCarrito = carrito.findIndex((elemento) => {
+        return elemento.nombre === item.nombre
+    });
     let btnCartText;
-    if (carrito.includes(item)) {
-        btnCartText = "Quitar del carrito"
-    } else {
-        btnCartText = "Agregar al carrito"
-    }
-
-    setButton(btnFavText, "botonModal", itemInfo, agregarFavoritos , item);
-    setButton(btnCartText, "botonModal", itemInfo, agregarCarrito, item);
-    setButton("Volver", "botonModal", itemInfo, cerrarModal, modalInfo);
+    peliculaEncontradaCarrito === -1 ? btnCartText = "Agregar al carrito" : btnCartText = "Quitar del carrito";
+    
+    setButton(btnFavText, "botonModal", "btnFav", itemInfo, agregarFavoritos , item);
+    setButton(btnCartText, "botonModal", "btnCart", itemInfo, agregarCarrito, item);
+    setButton("Volver", "botonModal", "btnVolver", itemInfo, cerrarModal, modalInfo);
 
     modalInfo.style.display = "block";
     body.style.overflow = "hidden";
@@ -209,34 +201,36 @@ function agregarFavoritos(item) {
     let peliculaEncontrada = favoritos.findIndex((elemento) => {
         return elemento.nombre === item.nombre
     });
-    if (peliculaEncontrada === -1) {
-        favoritos.push(item);
-        const favoritosStr = JSON.stringify(favoritos);
-        localStorage.setItem("PeliculasFavoritas", favoritosStr);
-    } else {
-        favoritos.splice(peliculaEncontrada, 1);
-        const favoritosStr = JSON.stringify(favoritos);
-        localStorage.setItem("PeliculasFavoritas", favoritosStr);
-    }
+    peliculaEncontrada === -1 ? favoritos.push(item) : favoritos.splice(peliculaEncontrada, 1);
+    
+    const favoritosStr = JSON.stringify(favoritos);
+    localStorage.setItem("PeliculasFavoritas", favoritosStr);
+
+    let textoBoton = document.querySelector("#btnFav");
+    textoBoton.innerHTML = "";
+    let btnFavText;
+    favoritos.includes(item) ? btnFavText = "Quitar de favoritos" : btnFavText = "Agregar a favoritos";
+    textoBoton.innerHTML = btnFavText;
 
     mostrarPeliculas();
+    
 }
 
 function agregarCarrito(item) {
     let peliculaEncontrada = carrito.findIndex((elemento) => {
         return elemento.nombre === item.nombre
     });
-    if (peliculaEncontrada === -1) {
-        carrito.push(item);
-        const carritoStr = JSON.stringify(carrito);
-        localStorage.setItem("PeliculasEnCarrito", carritoStr);
-    } else {
-        carrito.splice(peliculaEncontrada, 1);
-        const carritoStr = JSON.stringify(carrito);
-        localStorage.setItem("PeliculasEnCarrito", carritoStr);
-    }
+    peliculaEncontrada === -1 ? carrito.push(item) : carrito.splice(peliculaEncontrada, 1);
+
+    const carritoStr = JSON.stringify(carrito);
+    localStorage.setItem("PeliculasEnCarrito", carritoStr);
+
     modificarContadorCarrito();
 
+    let textoBoton = document.querySelector("#btnCart");
+    let btnCartText;
+    carrito.includes(item) ? btnCartText = "Quitar del carrito" : btnCartText = "Agregar al carrito";
+    textoBoton.innerHTML = btnCartText;
 }
 
 function modificarContadorCarrito () {
@@ -287,9 +281,12 @@ function finalizarCompra(){
     modificarContadorCarrito();
     modalCarrito.innerHTML = `<h3>¡Gracias por su compra!</h3> 
     <button onClick="cerrarModal(modalCart)">Aceptar</button>`
+    const carritoStr = JSON.stringify(carrito);
+    localStorage.setItem("PeliculasEnCarrito", carritoStr);
 }
 
 // Fin de funciones
 
 ingresarUsuario();
 mostrarPeliculas();
+modificarContadorCarrito ();
