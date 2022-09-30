@@ -209,11 +209,20 @@ function agregarFavoritos(item) {
     let textoBoton = document.querySelector("#btnFav");
     textoBoton.innerHTML = "";
     let btnFavText;
-    favoritos.includes(item) ? btnFavText = "Quitar de favoritos" : btnFavText = "Agregar a favoritos";
+    let textoNotificacion;
+    if (favoritos.includes(item)) {
+        btnFavText = "Quitar de favoritos"
+        textoNotificacion = `${item.nombre} fue agregado a favoritos`
+    } else {
+        btnFavText = "Agregar a favoritos"
+        textoNotificacion = `${item.nombre} fue quitado de favoritos`
+    }
+
     textoBoton.innerHTML = btnFavText;
 
     mostrarPeliculas();
-    
+
+    mostrarNotificacion(textoNotificacion);
 }
 
 function agregarCarrito(item) {
@@ -229,9 +238,20 @@ function agregarCarrito(item) {
 
     let textoBoton = document.querySelector("#btnCart");
     let btnCartText;
-    carrito.includes(item) ? btnCartText = "Quitar del carrito" : btnCartText = "Agregar al carrito";
+    let textoNotificacion;
+    if (carrito.includes(item)) {
+        btnCartText = "Quitar del carrito"
+        textoNotificacion = `${item.nombre} fue agregado al carrito`
+    } else {
+        btnCartText = "Agregar al carrito"
+        textoNotificacion = `${item.nombre} fue quitado del carrito`
+    }
+    
     textoBoton.innerHTML = btnCartText;
+
+    mostrarNotificacion(textoNotificacion);
 }
+
 
 function modificarContadorCarrito () {
     let carritoContainer = document.querySelector("#carrito");
@@ -275,14 +295,44 @@ function abrirCarrito() {
     body.style.overflow = "hidden";  
 }
 
+function mostrarNotificacion(notificacion) {
+    Toastify({
+        text: notificacion,
+        duration: 2000,
+        gravity: "bottom",
+        className: "toastifyNotification",
+        style: {
+            background: "linear-gradient(to right, #4741A6, #9bbbfce5)",
+        }
+        }).showToast();
+}
+
 function finalizarCompra(){
     modalCarrito.innerHTML = "";
-    carrito = [];
-    modificarContadorCarrito();
-    modalCarrito.innerHTML = `<h3>¡Gracias por su compra!</h3> 
-    <button onClick="cerrarModal(modalCart)">Aceptar</button>`
-    const carritoStr = JSON.stringify(carrito);
-    localStorage.setItem("PeliculasEnCarrito", carritoStr);
+    cerrarModal(modalCart); 
+
+    Swal.fire({
+        title: 'Estás a un paso de disfrutar del mejor cine',
+        text: "¿Confirmar compra?",
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Comprar',
+        cancelButtonText: 'Volver',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire(
+            'Compra realizada',
+            'Traé el pochoclo y disfrutá de la película',
+            'success'
+        )
+        carrito = [];
+        modificarContadorCarrito();
+        const carritoStr = JSON.stringify(carrito);
+        localStorage.setItem("PeliculasEnCarrito", carritoStr);
+        }
+      })
 }
 
 // Fin de funciones
