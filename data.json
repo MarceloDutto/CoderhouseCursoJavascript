@@ -153,5 +153,45 @@
         "calificacionIMDB": 8.9,
         "precio": 750,
         "miniatura": "miniatura-pulp",
-        "poster": "pulp-poster"} 
+        "poster": "pulp-poster"
+    },
+    {
+        "nombre": "V de Venganza",
+        "resumen": "En un futuro de tiranía británica, un luchador clandestino conocido como 'V' trama un complot para derrocar la tiranía con la ayuda de una joven.",
+        "estreno": 2005,
+        "duracion": 135,
+        "genero":  "Acción",
+        "director": "James MacTeigue",
+        "clasificacionEdad": 15,
+        "calificacionIMDB": 8.2,
+        "precio": 750,
+        "miniatura": "miniatura-v",
+        "poster": "v-poster"
+    },
+    {
+        "nombre": "Kill Bill Vol. 1",
+        "resumen": "Después de despertar de un coma de cuatro años, un ex asesino se vengó del equipo de asesinos que la traicionaron.",
+        "estreno": 2003,
+        "duracion": 111,
+        "genero":  "Acción",
+        "director": "Quentin Tarantino",
+        "clasificacionEdad": 18,
+        "calificacionIMDB": 8.2,
+        "precio": 750,
+        "miniatura": "miniatura-killbill",
+        "poster": "killbill-poster"
+    },
+    {
+        "nombre": "Kill Bill Vol. 2",
+        "resumen": "Tras eliminar a algunos miembros de la banda que intentaron asesinarla el día de su boda, 'Mamba Negra' intenta acabar con los demás, especialmente con Bill, su antiguo jefe, que la había dado por muerta.",
+        "estreno": 2005,
+        "duracion": 137,
+        "genero":  "Acción",
+        "director": "Quentin Tarantino",
+        "clasificacionEdad": 15,
+        "calificacionIMDB": 8.0,
+        "precio": 750,
+        "miniatura": "miniatura-killbill2",
+        "poster": "killbill2-poster"}
+    
 ]

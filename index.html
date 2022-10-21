@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafío: Fetch en tu proyecto</title>
+    <title>Cinefy - El cine en tu casa</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -20,8 +20,11 @@
                 <img src="./imagenes/ticket-logo.png" alt="cinefy">
             </div>
             <div class="searchBar">
-                <label for="">Buscar</label>
-                <input type="text">
+                <form id="searchForm">
+                    <label for="">Buscar</label>
+                    <input type="text" id="search">
+                </form>
+                
             </div>
             <div id="userName" class="userInfo"></div>
             <div class="carrito">
@@ -42,7 +45,7 @@
             <div id="favoritasCards"></div>
         </section>
         <section class="row catalogo">
-            <h3>Nuestro catálogo</h3>
+            <h3 id="bodyTitle">Nuestro catálogo</h3>
             <div id="todasCards"></div>
         </section>
     </div>
@@ -52,8 +55,11 @@
             <img src="./imagenes/banner.jpg" alt="banner">
             <h3>Bienvenido a <span>Cinefy</span></h3>
             <h3>Ingrese su usario</h3>
-            <input id="nombreUsuario" type="text">
-            <button id="ingresoUsuario">Aceptar</button>
+            <form id="ingresoUsuario">
+                <input id="nombreUsuario" type="text" placeholder="Nombre de usuario">
+                <input type="email" id="emailUsuario" placeholder="Ingrese su email">
+                <input type="submit" value="Aceptar" class="submit"></input>
+            </form>
         </div>
     </div>
 

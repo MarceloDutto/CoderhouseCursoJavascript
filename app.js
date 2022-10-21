@@ -1,42 +1,91 @@
-//Se declaran variables
+//Se declaran variables globales
 
-let usuario;
+let catalogoCompleto;
 let favoritos = JSON.parse (localStorage.getItem('PeliculasFavoritas')) || [];
 let carrito = JSON.parse (localStorage.getItem('PeliculasEnCarrito')) || [];
+let usuarioActual;
+
+
+
+//Variables para acceder al DOM
+
 const body = document.querySelector("body");
-const botonCarrito = document.querySelector("#botonCarrito");
+const bodyTitle = document.querySelector("#bodyTitle");
+let catalogo = document.getElementById("todasCards");
+let ftitulo = document.querySelector("#favTitulo");
+let favoritas = document.querySelector("#favoritasCards");
+
+const searchBar = document.querySelector("#search"); //Barra de busqueda
+searchBar.addEventListener("input", (e) => {
+    if (e.target.value != "") {
+        filtrarBusqueda(e.target.value);
+        cambiarBodyTitle("Resultados de la búsqueda:")
+    } else {
+        mostrarPeliculas()
+        cambiarBodyTitle("Nuestro catálogo")
+    }
+})
+
+const botonCarrito = document.querySelector("#botonCarrito"); // Botón para abrir el carrito
 botonCarrito.addEventListener("click", () => {
     carrito.length != 0 && abrirCarrito();
 })
 
 
-//Se declaran funciones
 
-function validarUsuario(user) {
+// Se crea la clase Usuario
+
+class usuario  {
+    constructor(nombre, email) {
+        this.nombre = nombre;
+        this.email = email;
+    }
+}
+
+//Funciones
+
+function validarUsuario(nombre) {
     let saludo = document.querySelector("#userName");
     saludo.innerHTML = "";
-    usuario = user;
     let frase = document.createElement("h2");
-    frase.innerHTML = `Bienvenid@, <span>${usuario}</span>`;
+    frase.innerHTML = `Bienvenid@, <span>${nombre}</span>`;
     saludo.appendChild(frase);
 }
 
 function ingresarUsuario() {
     let nombre;
+    let email;
     let pantallaIngreso = document.querySelector("#bienvenida");
     pantallaIngreso.style.display = "block";
     body.style.overflow = "hidden";
-    let campo = document.querySelector("#nombreUsuario");
-    campo.addEventListener("input", (e) => {
+
+    let campoNombre = document.querySelector("#nombreUsuario");
+    campoNombre.addEventListener("input", (e) => {
         nombre = e.target.value;
     });
+
+    let campoEmail = document.querySelector("#emailUsuario");
+    campoEmail.addEventListener("input", (e) => {
+        email = e.target.value;
+    });
+        
     let ingreso = document.querySelector("#ingresoUsuario");
-    ingreso.addEventListener("click", () => {
-        campo.value = ""
+    ingreso.addEventListener("submit", (e) => {
+        e.preventDefault(); 
+        campoNombre.value = "";
+        campoEmail.value = "";
+        usuarioActual = new usuario(nombre, email);
+        usuarioActual.nombre != undefined ? nombre : usuarioActual.nombre = "anónimo";
+        usuarioActual.email != undefined ? email : usuarioActual.email = "E-mail no validado"
+
         cerrarModal(pantallaIngreso);
-        nombre != undefined ? nombre : nombre = "usuario";
-        validarUsuario(nombre);
+
+        validarUsuario(usuarioActual.nombre);
     })
+}
+
+function cambiarBodyTitle (texto) {
+    bodyTitle.innerHTML = texto
 }
 
 function setButton(inBtn, addedClass, newId, container, action, reference) {
@@ -56,16 +105,8 @@ function cerrarModal(param) {
     body.style.overflow = "auto";
 }
 
-const mostrarPeliculas = async() => {
-    const response = await fetch('data.json')
-    const todasPeliculas = await response.json()
-
-    let catalogo = document.getElementById("todasCards");
-    while (catalogo.hasChildNodes()) {
-        catalogo.removeChild(catalogo.firstChild);
-    }
-
-    todasPeliculas.forEach((pelicula, indice) => {
+function renderCards(lista, container) {
+    lista.forEach((pelicula, indice) => {
         let card = document.createElement("div");
         card.classList.add("card");
         card.innerHTML = `
@@ -80,51 +121,61 @@ const mostrarPeliculas = async() => {
                     <p>Precio: $${pelicula.precio}</p>   
                 </div>
             </div>`
-    catalogo.appendChild(card)
+    container.appendChild(card)
     
     card.addEventListener("click", () => {
-        mostrarInfo(todasPeliculas, indice)
+        mostrarInfo(lista, indice)
     })
 
     })
-
-    let favoritas = document.querySelector("#favoritasCards");
-    let ftitulo = document.querySelector("#favTitulo");
-    if (favoritos.length > 0) {
-        while (favoritas.hasChildNodes()) {
-            favoritas.removeChild(favoritas.firstChild);
-        }
-        favoritos.forEach((fpelicula, findice) => {
-            let fcard = document.createElement("div");
-            fcard.classList.add("card");
-            fcard.innerHTML = `
-                <div>
-                    <img src="./imagenes/${fpelicula.miniatura}.jpg" alt="catalogo de peliculas">
-                </div>
-                <div class="cardInfo">
-                    <div class="cardText">
-                        <h4>${fpelicula.nombre}</h4>
-                        <p>Duración: ${fpelicula.duracion} min</p>
-                        <p>Género: ${fpelicula.genero}</p>
-                        <p>Precio: $${fpelicula.precio}</p>   
-                    </div>
-                </div>`
-        ftitulo.style.display = "block"
-        favoritas.appendChild(fcard)
-
-        fcard.addEventListener("click", () => {
-            mostrarInfo(favoritos, findice)
-        })
-        })
-} else {
-    ftitulo.style.display = "none"
-    favoritas.hasChildNodes() && favoritas.removeChild(favoritas.firstChild);
 }
+
+function limpiarCards (container) {
+    while (container.hasChildNodes()) {
+        container.removeChild(container.firstChild);
+    }
+}
+
+const mostrarPeliculas = async() => {
+    const response = await fetch('data.json')
+    const todasPeliculas = await response.json()
+    catalogoCompleto = todasPeliculas
+
+    limpiarCards(catalogo)
+
+    renderCards(catalogoCompleto, catalogo);
+        
+    if (favoritos.length > 0) {
+        limpiarCards(favoritas)
+        renderCards(favoritos, favoritas);
+        ftitulo.style.display = "block";
+    } else {
+        ftitulo.style.display = "none";
+        favoritas.hasChildNodes() && favoritas.removeChild(favoritas.firstChild);
+    }
 } 
+
+function filtrarBusqueda(value) {
+    let peliculasFiltradas = []
+    let valueUppercase = value.toUpperCase();
+    for (const iterator of catalogoCompleto) {
+        let iteratorNameUppercase = iterator.nombre.toUpperCase();
+        if (iteratorNameUppercase.indexOf(valueUppercase) > -1) {
+            peliculasFiltradas.push(iterator);
+        }
+        if (peliculasFiltradas.length > 0) {
+            limpiarCards(catalogo);
+            limpiarCards(favoritas);
+            ftitulo.style.display = "none";
+            renderCards(peliculasFiltradas, catalogo);
+        }
+    }
+}
 
 function mostrarInfo(array, indice) {
     const item = array[indice];
     let {nombre, resumen, director, duracion, genero, estreno, clasificacionEdad, calificacionIMDB, precio, poster} = item;
+
     let modalInfo = document.querySelector("#modalInfoPelicula");
     let itemInfo = document.createElement("div");
     itemInfo.classList.add("modalInfoContent");
@@ -150,18 +201,25 @@ function mostrarInfo(array, indice) {
     let peliculaEncontradaFavoritos = favoritos.findIndex((elemento) => {
         return elemento.nombre === item.nombre
     });
+
     let btnFavText;
     peliculaEncontradaFavoritos === -1 ? btnFavText = "Agregar a favoritos" : btnFavText = "Quitar de favoritos";
 
     let peliculaEncontradaCarrito = carrito.findIndex((elemento) => {
         return elemento.nombre === item.nombre
     });
+
     let btnCartText;
     peliculaEncontradaCarrito === -1 ? btnCartText = "Agregar al carrito" : btnCartText = "Quitar del carrito";
+
+    let itemActions = document.createElement("div");
+    itemActions.classList.add("modalInfoActions");
+
     
-    setButton(btnFavText, "botonModal", "btnFav", itemInfo, agregarFavoritos , item);
-    setButton(btnCartText, "botonModal", "btnCart", itemInfo, agregarCarrito, item);
-    setButton("Volver", "botonModal", "btnVolver", itemInfo, cerrarModal, modalInfo);
+    setButton(btnFavText, "botonModal", "btnFav", itemActions, agregarFavoritos , item);
+    setButton(btnCartText, "botonModal", "btnCart", itemActions, agregarCarrito, item);
+    setButton("Volver", "botonModal", "btnVolver", itemActions, cerrarModal, modalInfo);
+    itemInfo.appendChild(itemActions);
 
     modalInfo.style.display = "block";
     body.style.overflow = "hidden";
@@ -239,13 +297,14 @@ function abrirCarrito() {
     let modalCarrito = document.querySelector("#modalCarrito");
     modalCarrito.innerHTML = ""
     if (carrito.length > 0) {
-        carrito.forEach((pelicula) => {
+        carrito.forEach((pelicula,indice) => {
             total = total + pelicula.precio;
             let modalContent = document.createElement("div");
             modalContent.classList.add("descripcionPelicula");
             modalContent.innerHTML = `<img src="./imagenes/${pelicula.miniatura}.jpg" alt="matrix">
             <p>${pelicula.nombre}</p>
-            <p>$${pelicula.precio}</p>`
+            <p>$${pelicula.precio}</p>
+            <button onClick="eliminarItem(${indice})">X Eliminar</button>`
             modalCarrito.appendChild(modalContent);
         })
         let montoTotal = document.createElement("div");
@@ -258,11 +317,43 @@ function abrirCarrito() {
         acciones.classList.add("accionesCarrito");
         acciones.innerHTML = "";
         acciones.innerHTML = `<button onClick="finalizarCompra()">Finalizar compra</button>
+            <button onClick="vaciarCarrito()">Vaciar carrito</button>
             <button onClick="cerrarModal(modalCart)">Volver</button>`
         modalCarrito.appendChild(acciones)
     }
     modalCart.style.display = "block";
     body.style.overflow = "hidden";  
+}
+
+function eliminarItem(indice) {
+    let nombre = carrito[indice].nombre;
+    carrito.splice(indice, 1);
+
+    const carritoStr = JSON.stringify(carrito);
+    localStorage.setItem("PeliculasEnCarrito", carritoStr);
+    
+    modificarContadorCarrito();
+
+    cerrarModal(modalCart);
+
+    mostrarNotificacion(`${nombre} fue quitado del carrito`)
+
+    if (carrito.length != 0) {
+        abrirCarrito()
+    }    
+}
+
+function vaciarCarrito() {
+    carrito = [];
+
+    const carritoStr = JSON.stringify(carrito);
+    localStorage.setItem("PeliculasEnCarrito", carritoStr);
+
+    modificarContadorCarrito();
+
+    cerrarModal(modalCart);
+
+    mostrarNotificacion("El carrito ha sido vaciado");
 }
 
 function mostrarNotificacion(notificacion) {
@@ -281,6 +372,7 @@ function finalizarCompra(){
     modalCarrito.innerHTML = "";
     cerrarModal(modalCart); 
 
+
     Swal.fire({
         title: 'Estás a un paso de disfrutar del mejor cine',
         text: "¿Confirmar compra?",
@@ -294,11 +386,13 @@ function finalizarCompra(){
         if (result.isConfirmed) {
           Swal.fire(
             'Compra realizada',
-            'Traé el pochoclo y disfrutá de la película',
+            'Traé el pochoclo y disfrutá de la película. Su recibo fue enviado a ' + usuarioActual.email,
             'success'
         )
         carrito = [];
+
         modificarContadorCarrito();
+
         const carritoStr = JSON.stringify(carrito);
         localStorage.setItem("PeliculasEnCarrito", carritoStr);
         }
@@ -307,6 +401,10 @@ function finalizarCompra(){
 
 // Fin de funciones
 
+// Iniciar app
+
 ingresarUsuario();
+
 mostrarPeliculas();
-modificarContadorCarrito ();
+
+modificarContadorCarrito();

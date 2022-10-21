@@ -70,17 +70,28 @@ body {
     font-weight: 700;
 }
 
+.modalContent form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
 .modalContent input {
     height: 32px;
     border-radius: 5px;
     width: 350px;
     padding-left: 8px;
+    margin-bottom: 5px;
 }
-.modalContent button {
+.modalContent .submit {
+    background-color: #F9CE69;
     height: 32px;
     border-radius: 5px;
     width: 150px;
     cursor: pointer;
+    font-family: 'Montserrat', Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    border: none;
 }
 
 
@@ -93,7 +104,8 @@ body {
     width: 100%;
     height: 70px;
     padding: 0 4%;
-    position: fixed
+    position: fixed;
+    z-index: 1;
 }
 
 .logo {
@@ -131,6 +143,7 @@ body {
     height: 28px;
     width: 250px;
     border-radius: 5px;
+    padding-left: 10px;
 }
 
 .userInfo {
@@ -215,6 +228,11 @@ section p {
     border-radius: 10px;
     margin: 10px;
     cursor: pointer;
+    transition: transform .2s ease-in;
+}
+
+.card:hover {
+    transform: scale(1.05);
 }
 
 .cardInfo {
@@ -247,7 +265,7 @@ section p {
     padding: 5px;
 }
 
-/* MODAL DE INFORMACIÓN DE PELICLULA */
+/* MODAL DE INFORMACIÓN DE PELICULA */
 
 .modalInfo {
     display: none;
@@ -264,7 +282,7 @@ section p {
     margin: 15% auto;
     background-color: #9bbbfce5;
     border: 5px solid #4741A6;
-    width: 60%;
+    width: 70%;
     padding: 30px;
     display: flex;
     overflow: hidden;
@@ -287,8 +305,14 @@ section p {
     flex-wrap: wrap;
 }
 
-.modalInfoContent .botonModal {
-    height: 100px;
+.modalInfoActions {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;    
+    margin-left: 10px;
+}
+
+.botonModal {
     margin-right: 5px;
     padding: 1rem 2rem;
     background-color: #F9CE69;
@@ -296,6 +320,7 @@ section p {
     border: 1px solid #4741A6;
     cursor: pointer;
 }
+
     
 /*MODAL DEL CARRITO*/
 
